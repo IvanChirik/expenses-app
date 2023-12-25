@@ -1,26 +1,29 @@
-import { Injectable } from '@nestjs/common';
-import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { UserService } from 'src/user/user.service';
+import * as bcrypt from 'bcrypt';
+import { JwtService } from '@nestjs/jwt';
+import { IUser } from 'src/interfaces/interfaces';
+
 
 @Injectable()
 export class AuthService {
-  create(createAuthDto: CreateAuthDto) {
-    return 'This action adds a new auth';
-  }
+  constructor(
+    private readonly userService: UserService,
+    private readonly jwtService: JwtService) { }
 
-  findAll() {
-    return `This action returns all auth`;
+  async validateUser(email: string, password: string): Promise<any> {
+    const user = await this.userService.findOne(email);
+    const passwordIsMatch = await bcrypt.compare(password, user?.password)
+    if (user && passwordIsMatch)
+      return user
+    throw new UnauthorizedException('Email или пароль не действительны')
   }
-
-  findOne(id: number) {
-    return `This action returns a #${id} auth`;
-  }
-
-  update(id: number, updateAuthDto: UpdateAuthDto) {
-    return `This action updates a #${id} auth`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} auth`;
+  async login(user: IUser) {
+    const { id, email } = user;
+    return {
+      id,
+      email,
+      access_token: this.jwtService.sign({ id, email }),
+    };
   }
 }
