@@ -14,13 +14,32 @@ export class TransactionService {
   ) { }
 
 
+  async findAllWithPagination(id: number, page: number, limit: number) {
+    const transactions = await this.transactionRepository.find({
+      where: {
+        user: {
+          id
+        }
+      },
+      order: {
+        createdAt: "DESC"
+      },
+      take: limit,
+      skip: (page - 1) * limit
+    });
+    if (!transactions.length)
+      throw new BadRequestException('Транзакции не найдены');
+    return transactions;
+  }
+
+
   async create(createTransactionDto: CreateTransactionDto, id: number) {
     const newTransaction = {
       title: createTransactionDto.title,
       amount: createTransactionDto.amount,
       type: createTransactionDto.type,
       category: {
-        id: +createTransactionDto.categoryId
+        id: +createTransactionDto.category.id
       },
       user: {
         id
@@ -47,7 +66,7 @@ export class TransactionService {
     return transactions;
   }
 
-  async findOne(id: number, userId: number) {
+  async findOne(id: number, userId?: number) {
     const transaction = await this.transactionRepository.findOne({
       where: {
         user: {
@@ -79,7 +98,18 @@ export class TransactionService {
     return await this.transactionRepository.update(id, updateTransactionDto)
   }
 
-  async remove(id: number) {
-    return `This action removes a #${id} transaction`;
+  async remove(id: number, userId: number) {
+    const transaction = await this.transactionRepository.findOne({
+      where: {
+        id,
+        user: {
+          id: userId
+        }
+      }
+    });
+    if (!transaction)
+      throw new BadRequestException('Транзакция для удаления не найдена');
+
+    return await this.transactionRepository.delete(id);
   }
 }

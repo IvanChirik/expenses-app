@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UsePipes, ValidationPipe, UseGuards, Request } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UsePipes, ValidationPipe, UseGuards, Request, Query } from '@nestjs/common';
 import { TransactionService } from './transaction.service';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { UpdateTransactionDto } from './dto/update-transaction.dto';
@@ -7,6 +7,13 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 @Controller('transactions')
 export class TransactionController {
   constructor(private readonly transactionService: TransactionService) { }
+
+
+  @Get('pagination')
+  @UseGuards(JwtAuthGuard)
+  findAllWithPagination(@Request() req, @Query('page') page: number, @Query('limit') limit: number) {
+    return this.transactionService.findAllWithPagination(+req.user.id, page, limit)
+  }
 
   @Post()
   @UsePipes(new ValidationPipe())
@@ -28,15 +35,14 @@ export class TransactionController {
   }
 
   @Patch(':id')
-  @UsePipes(new ValidationPipe())
   @UseGuards(JwtAuthGuard)
-  update(@Param('id') id: string, @Body() updateTransactionDto: UpdateTransactionDto, @Request() req) {
-    return this.transactionService.update(+id, updateTransactionDto, +req.user.id);
+  update(@Param('id') id: string, @Body() updateCategoryDto: UpdateTransactionDto, @Request() req) {
+    return this.transactionService.update(+id, updateCategoryDto, +req.user.id);
   }
 
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
-  remove(@Param('id') id: string) {
-    return this.transactionService.remove(+id);
+  remove(@Param('id') id: string, @Request() req) {
+    return this.transactionService.remove(+id, +req.user.id);
   }
 }

@@ -1,4 +1,5 @@
 import { IsNotEmpty, IsNumber, MaxLength } from "class-validator"
+import { Categories } from "src/category/entities/category.entity"
 
 
 export class CreateTransactionDto {
@@ -11,6 +12,5 @@ export class CreateTransactionDto {
     @MaxLength(6)
     type: 'income' | 'expense'
     @IsNotEmpty()
-    @IsNumber()
-    categoryId: number
+    category: Categories
 }
