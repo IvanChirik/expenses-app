@@ -15,8 +15,6 @@ export class CategoryService {
 
 
   async create(createCategoryDto: CreateCategoryDto, id: number) {
-    console.log(id);
-
     const isEmpty = await this.categoriesRepository.findBy({
       user: { id },
       title: createCategoryDto.title
@@ -31,7 +29,6 @@ export class CategoryService {
     }
     return await this.categoriesRepository.save(category);
   }
-
   async findAll(id: number) {
     return await this.categoriesRepository.find({
       where: {
@@ -44,7 +41,6 @@ export class CategoryService {
       }
     });
   }
-
   async findOne(id: number) {
     const category = await this.categoriesRepository.findOne({
       where: { id },
@@ -57,7 +53,6 @@ export class CategoryService {
       throw new NotFoundException('Категория не найдена')
     return category;
   }
-
   async update(id: number, updateCategoryDto: UpdateCategoryDto) {
     const category = await this.categoriesRepository.findOne({
       where: { id }
@@ -66,7 +61,6 @@ export class CategoryService {
       throw new NotFoundException('Категория не найдена');
     return await this.categoriesRepository.update(id, updateCategoryDto);
   }
-
   async remove(id: number) {
     const category = await this.categoriesRepository.findOne({
       where: { id }
