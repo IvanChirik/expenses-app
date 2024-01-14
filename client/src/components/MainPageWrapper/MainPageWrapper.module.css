@@ -1,0 +1,22 @@
+.profile {
+    justify-self: center;
+    flex: 1;
+}
+
+.content-block {
+    height: 70vh;
+    justify-self: center;
+    flex: 2;
+    display: flex;
+    gap: 40px;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.graph {
+    flex: 1;
+}
+
+.transaction {
+    flex: 2;
+}

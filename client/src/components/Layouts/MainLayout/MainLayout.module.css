@@ -1,0 +1,28 @@
+.navigate {
+    font-size: 18px;
+    display: flex;
+    justify-content: space-around;
+    padding: 10px;
+}
+
+.link {
+    text-align: center;
+    padding: 15px 5px;
+    max-width: 200px;
+    width: 100%;
+    transition: all 0.2s;
+}
+
+.link:hover,
+.active {
+    font-size: 20px;
+    border-bottom: 1px solid rgb(139, 118, 246);
+}
+
+.main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 84vh;
+    margin-bottom: 30px;
+}

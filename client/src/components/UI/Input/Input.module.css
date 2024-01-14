@@ -1,0 +1,23 @@
+.input {
+    font-size: 20px;
+    background: none;
+    border: none;
+    outline: none;
+    padding: 10px;
+    border-bottom: 1px solid rgb(139, 118, 246);
+    width: 400px;
+    transition: all 0.2s;
+}
+
+.input::placeholder {
+    color: aliceblue;
+    font-size: 16px;
+    font-weight: 300;
+}
+
+.input:hover,
+.input:focus {
+    border-radius: 2px;
+    box-shadow: 0px 15px 15px -15px rgba(139, 118, 246, 0.4);
+    width: 450px;
+}

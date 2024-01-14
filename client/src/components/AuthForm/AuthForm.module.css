@@ -1,0 +1,31 @@
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.title,
+.button {
+    align-self: center;
+    margin-bottom: 10px;
+}
+
+.input-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.footer-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.footer-block>a {
+    color: rgb(139, 118, 246);
+}
+
+.footer-block>a:hover {
+    color: rgb(154, 137, 243);
+}

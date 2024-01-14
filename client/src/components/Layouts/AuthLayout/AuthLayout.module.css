@@ -1,0 +1,22 @@
+.wrapper {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+}
+
+.logo,
+.content {
+    flex: 1;
+    padding: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.image {
+    position: fixed;
+    top: 200px;
+    right: 100px;
+}
