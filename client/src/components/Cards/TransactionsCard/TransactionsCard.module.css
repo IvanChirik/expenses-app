@@ -1,0 +1,52 @@
+.transaction-wrapper {
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.pagination {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    /* background-color: rgb(139, 118, 246); */
+}
+
+.dots {
+    margin-top: 12px;
+}
+
+.input-wrapper {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    position: relative;
+}
+
+.search-icon {
+    font-size: 20px;
+    position: fixed;
+    margin: 10px;
+}
+
+
+.input:hover+.search-icon,
+.input:focus+.search-icon {
+    color: rgb(139, 118, 246);
+}
+
+.arrow {
+    font-size: 20px;
+    margin-top: 10px;
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+
+.arrow:hover {
+    border-bottom: 1px solid rgb(139, 118, 246);
+}

@@ -3,4 +3,46 @@
     height: 70vh;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
+    gap: 25px;
+}
+
+.profile-photo,
+.add-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-self: center;
+}
+
+.profile-info {
+    display: flex;
+    flex-direction: column;
+    gap: 15px
+}
+
+.add-button {
+    font-size: 18px;
+}
+
+.info-wrapper {
+    display: flex;
+    text-align: center;
+    gap: 20px
+}
+
+
+.income,
+.expense {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.income {
+    color: rgba(165, 230, 46);
+}
+
+.expense {
+    color: rgba(244, 77, 77);
 }
