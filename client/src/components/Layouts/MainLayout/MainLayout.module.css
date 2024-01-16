@@ -3,6 +3,7 @@
     display: flex;
     justify-content: space-around;
     padding: 10px;
+    transition: height 3s;
 }
 
 .link {
@@ -26,3 +27,16 @@
     min-height: 84vh;
     margin-bottom: 30px;
 }
+
+/* 
+.additional-content {
+    display: none;
+}
+
+.navigate:hover {
+    height: 100px;
+}
+
+.navigate:hover .additional-content {
+    display: block;
+} */

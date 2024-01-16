@@ -13,20 +13,81 @@
 
 .modal-content {
     background-color: #000;
-    padding: 20px;
-    box-shadow: 0px 0px 25px 0px rgba(139, 118, 246, 0.3);
-    border-radius: 10px;
-    width: 80%;
-    max-width: 70vw;
-    min-height: 70vh;
+    width: 50vw;
+    height: 50vh;
     position: relative;
 }
 
-.close {
-    color: #aaa;
+.dropdown-section {
+    display: flex;
+    justify-content: space-between;
+}
+
+.form {
+    min-width: 450px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+}
+
+.form-button {
+    margin-top: 20px;
+    align-self: center;
+}
+
+.transaction-block {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+}
+
+.transaction-type-button {
+    border: none;
+    background: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+.button-block {
+    display: flex;
+    gap: 10px;
+}
+
+.income-type {
+    border: 1px solid var(--income-block-color);
+}
+
+.income-type:hover,
+.income-active {
+    background-color: var(--income-block-color);
+}
+
+.expense-type {
+    border: 1px solid var(--expense-block-color);
+}
+
+.expense-type:hover,
+.expense-active {
+    background-color: var(--expense-block-color);
+}
+
+
+
+.close-button {
     position: absolute;
     top: 10px;
     right: 10px;
-    font-size: 20px;
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    background-color: var(--primary-color);
     cursor: pointer;
+}
+
+.close-button:hover {
+    background-color: var(--primary-hover-color);
 }

@@ -32,6 +32,10 @@
   --callout-border-rgb: 172, 175, 176;
   --card-rgb: 180, 185, 188;
   --card-border-rgb: 131, 134, 135;
+  --primary-color: rgb(139, 118, 246);
+  --primary-hover-color: rgb(154, 137, 243);
+  --expense-block-color: rgba(244, 77, 77, 0.5);
+  --income-block-color: rgba(165, 230, 46, 0.5);
 }
 
 @media (prefers-color-scheme: dark) {
