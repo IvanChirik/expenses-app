@@ -29,3 +29,9 @@
 .footer-block>a:hover {
     color: rgb(154, 137, 243);
 }
+
+.error {
+    margin-top: 10px;
+    font-size: 14px;
+    color: var(--expense-block-color)
+}

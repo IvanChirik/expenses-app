@@ -3,7 +3,7 @@
     display: inline-block;
     cursor: pointer;
     padding: 10px;
-    border: 1px solid var(--primary-hover-color);
+    background-color: var(--primary-color);
     border-radius: 10px;
 }
 
@@ -37,7 +37,6 @@
 
 
 .active {
-    color: var(--primary-hover-color);
     transform: rotate(-180deg);
 }
 
