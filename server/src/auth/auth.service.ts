@@ -13,17 +13,18 @@ export class AuthService {
 
   async validateUser(email: string, password: string): Promise<any> {
     const user = await this.userService.findOne(email);
-    const passwordIsMatch = await bcrypt.compare(password, user?.password)
+    const passwordIsMatch = await bcrypt.compare(password, user?.password);
+    if (!passwordIsMatch) throw new UnauthorizedException('Неверный пароль.')
     if (user && passwordIsMatch)
       return user
-    throw new UnauthorizedException('Email или пароль не действительны')
   }
   async login(user: IUser) {
-    const { id, email } = user;
+    const { id, email, name } = user;
     return {
       id,
       email,
-      access_token: this.jwtService.sign({ id, email }),
+      name,
+      access_token: this.jwtService.sign({ id, email, name }),
     };
   }
 }
