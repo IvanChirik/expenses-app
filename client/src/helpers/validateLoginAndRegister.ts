@@ -6,3 +6,6 @@ export const validatePassword = (password: string) => {
     const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*])(.{8,})$/;
     return passwordRegex.test(password);
 };
+export const validateName = (name: string) => {
+    return name.length > 1;
+}

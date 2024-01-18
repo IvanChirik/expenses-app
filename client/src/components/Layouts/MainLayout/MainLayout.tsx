@@ -6,7 +6,7 @@ import styles from './MainLayout.module.css';
 import { usePathname } from "next/navigation";
 import cn from 'classnames';
 import { IPath, PATHS } from "@/helpers/paths";
-import { QueryClient, QueryClientProvider } from "react-query";
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const queryClient = new QueryClient({
     defaultOptions: {

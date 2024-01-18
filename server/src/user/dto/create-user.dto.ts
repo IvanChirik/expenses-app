@@ -5,4 +5,6 @@ export class CreateUserDto {
     email: string
     @MinLength(6, { message: 'Пароль должен содержать не меньше 6 символов' })
     password: string
+    @MinLength(2, { message: 'Имя не может быть меньше двух букв' })
+    name: string
 }

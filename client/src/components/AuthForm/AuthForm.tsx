@@ -8,27 +8,31 @@ import Button from '../UI/Button/Button';
 import { AuthFormProps } from './AuthForm.props';
 import styles from './AuthForm.module.css';
 import cn from 'classnames';
-import { SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form';
-import { validateEmail, validatePassword } from '@/helpers/validateLoginAndRegister';
-import { useQuery } from 'react-query';
-import axios from 'axios';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { validateEmail, validateName, validatePassword } from '@/helpers/validateLoginAndRegister';
+import { useAuth } from '@/hooks/useAuth';
+import Toastify from '../UI/Toastify/Toastify';
 
-interface IFormData {
+export interface IFormData {
     email: string;
     password: string;
+    name?: string;
 }
 
-const AuthForm: FC<PropsWithChildren<AuthFormProps>> = ({ children, className, title, inputBlock, buttonName, ...props }) => {
-    const { register, handleSubmit, formState: { errors } } = useForm<IFormData>()
+const AuthForm: FC<PropsWithChildren<AuthFormProps>> = ({ children, className, title, registration = false, buttonName, ...props }) => {
+    const { register, handleSubmit, formState: { errors } } = useForm<IFormData>();
+    const { mutate } = useAuth(registration);
     const submit: SubmitHandler<IFormData> = (data) => {
-        console.log(data);
+        if (registration)
+            mutate({ email: data.email, password: data.password, name: data.name });
+        else
+            mutate({ email: data.email, password: data.password });
     }
-    const error: SubmitErrorHandler<IFormData> = (data) => {
-        console.log(data);
-    }
-    return <form className={cn(styles.form, className)} {...props} onSubmit={handleSubmit(submit, error)}>
+
+
+    return <form className={cn(styles.form, className)} {...props} onSubmit={handleSubmit(submit)}>
         <HTag size='big' className={styles.title}>{title}</HTag>
-        <div>
+        <div className={styles['input-wrapper']}>
             <Label htmlFor='email'>Email</Label>
             <Input
                 id='email'
@@ -41,7 +45,7 @@ const AuthForm: FC<PropsWithChildren<AuthFormProps>> = ({ children, className, t
                 Проверьте правильность введённого email
             </div>
         </div>
-        <div>
+        <div className={styles['input-wrapper']}>
             <Label htmlFor='password'>Пароль</Label>
             <Input
                 id='password'
@@ -54,18 +58,19 @@ const AuthForm: FC<PropsWithChildren<AuthFormProps>> = ({ children, className, t
                 Проверьте правильность введённого пароля
             </div>
         </div>
-        {inputBlock?.map(i => <div key={i.id} className={styles['input-wrapper']}>
-            <Label htmlFor={i.id}>{i.label}</Label>
+        {registration && <div className={styles['input-wrapper']}>
+            <Label htmlFor='name'>Имя</Label>
             <Input
-                id={i.id}
-                type={i.type}
-                placeholder={`Введите свой ${i.label.toLowerCase()}`}
+                id='name'
+                placeholder='Введите имя'
+                {...register('name', { required: true, validate: value => value && validateName(value) })}
             />
-        </div>)}
+        </div>}
         <Button className={styles.button}>{buttonName}</Button>
         <div className={styles['footer-block']}>
             {children}
         </div>
+        <Toastify />
     </form>
 };
 

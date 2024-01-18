@@ -8,6 +8,6 @@ export interface IInputBlock {
 
 export interface AuthFormProps extends FormHTMLAttributes<HTMLFormElement> {
     title: string;
-    inputBlock?: IInputBlock[];
+    registration?: boolean;
     buttonName: 'Войти' | 'Зарегестрироваться'
 }
