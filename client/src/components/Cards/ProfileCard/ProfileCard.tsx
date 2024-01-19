@@ -9,10 +9,11 @@ import { VscAccount } from 'react-icons/vsc';
 import { VscAdd } from "react-icons/vsc";
 import Button from "@/components/UI/Button/Button";
 import Modal from "@/components/Modal/Modal";
+import { useUserState } from "@/stores/user.store";
 
 const ProfileCard: FC<IProfileCard> = ({ className, ...props }) => {
     const [isModalHidden, setIsModalHidden] = useState<boolean>(true);
-
+    const { userProfile } = useUserState.getState();
     const openModalWindow = () => {
         setIsModalHidden(false)
     }
@@ -25,8 +26,8 @@ const ProfileCard: FC<IProfileCard> = ({ className, ...props }) => {
             <Card className={cn(className, styles['profile-card'])} {...props}>
                 <div className={styles['profile-info']}>
                     <div className={styles['profile-photo']}><VscAccount style={{ fontSize: '50px' }} /></div>
-                    <div className={styles['profile-name']}>Ivan</div>
-                    <div className={styles['profile-email']}>ivancherviakovskiy@gmail.com</div>
+                    <div className={styles['profile-name']}>{userProfile?.name}</div>
+                    <div className={styles['profile-email']}>{userProfile?.email}</div>
                 </div>
                 <Button onClick={openModalWindow} className={styles['add-button']}><VscAdd style={{ fontSize: '25px' }} />Добавить запись</Button>
                 <div className={styles['info-wrapper']}>

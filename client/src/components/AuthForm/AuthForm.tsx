@@ -29,7 +29,6 @@ const AuthForm: FC<PropsWithChildren<AuthFormProps>> = ({ children, className, t
             mutate({ email: data.email, password: data.password });
     }
 
-
     return <form className={cn(styles.form, className)} {...props} onSubmit={handleSubmit(submit)}>
         <HTag size='big' className={styles.title}>{title}</HTag>
         <div className={styles['input-wrapper']}>

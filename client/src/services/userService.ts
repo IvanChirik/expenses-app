@@ -1,14 +1,14 @@
 import { API_URL } from "@/helpers/api";
+import { $api } from "@/http";
 import { IUserAuth } from "@/interfaces/user.interface"
-import axios, { AxiosError } from "axios"
+import { AxiosError } from "axios"
 
 class userService {
-    private readonly USER_ENDPOINT = `${API_URL}`;
-
 
     async registration(email: string, password: string, name: string) {
         try {
-            const { data: user } = await axios.post<IUserAuth>(`${this.USER_ENDPOINT}/user`, { email, password, name });
+            const { data: user } = await $api.post<IUserAuth>('/user', { email, password, name });
+            console.log(user);
             return user;
         }
         catch (error) {
@@ -20,7 +20,7 @@ class userService {
 
     async login(email: string, password: string) {
         try {
-            const { data: user } = await axios.post<IUserAuth>(`${this.USER_ENDPOINT}/auth/login`, { email, password });
+            const { data: user } = await $api.post<IUserAuth>('/auth/login', { email, password });
             return user;
         }
         catch (error) {

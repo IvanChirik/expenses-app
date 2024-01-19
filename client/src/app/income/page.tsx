@@ -1,4 +1,3 @@
-
 import Card from '@/components/UI/Card/Card';
 import React from 'react';
 
