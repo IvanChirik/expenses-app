@@ -9,7 +9,7 @@ import { AuthFormProps } from './AuthForm.props';
 import styles from './AuthForm.module.css';
 import cn from 'classnames';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { validateEmail, validateName, validatePassword } from '@/helpers/validateLoginAndRegister';
+import { validateEmail, validateName, validatePassword } from '@/helpers/validate';
 import { useAuth } from '@/hooks/useAuth';
 import Toastify from '../UI/Toastify/Toastify';
 

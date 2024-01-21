@@ -1,6 +1,6 @@
 'use client';
 
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import Card from '../../UI/Card/Card';
 import styles from './TransactionsCard.module.css';
 import { ITransactionsCard } from './TransactionsCard.props';
@@ -12,6 +12,8 @@ import { MdKeyboardDoubleArrowRight } from "react-icons/md";
 import { MdKeyboardDoubleArrowLeft } from "react-icons/md";
 import { BsThreeDots } from "react-icons/bs";
 import { FiSearch } from "react-icons/fi";
+import { useQuery } from '@tanstack/react-query';
+import transactionService from '@/services/transactionService';
 
 
 const TRANSACTION_LIST: ITransactionItem[] = [
@@ -58,6 +60,10 @@ const TRANSACTION_LIST: ITransactionItem[] = [
 ]
 
 const TransactionsCard: FC<ITransactionsCard> = ({ className, ...props }) => {
+    const [transactionPage, setTransactionPage] = useState<number>(1);
+    const { data, error, isError } = useQuery({ queryKey: ['transactions'], queryFn: () => transactionService.findWithPagination(transactionPage) })
+    console.log(data);
+
     return (
         <Card onWheel={() => console.log('wheel')} className={cn(className, styles['transaction-wrapper'])} {...props}>
             <div className={styles['card-header']}>
@@ -66,9 +72,11 @@ const TransactionsCard: FC<ITransactionsCard> = ({ className, ...props }) => {
                     <FiSearch className={styles['search-icon']} />
                 </div>
                 <div className={styles.pagination}>
-                    <button className={styles.arrow}><MdKeyboardDoubleArrowLeft /></button>
+                    <button className={styles.arrow}
+                        onClick={() => setTransactionPage(prev => prev - 1)}><MdKeyboardDoubleArrowLeft /></button>
                     1  <BsThreeDots className={styles.dots} /> 20
-                    <button className={styles.arrow}><MdKeyboardDoubleArrowRight /></button>
+                    <button className={styles.arrow}
+                        onClick={() => setTransactionPage(prev => prev + 1)}><MdKeyboardDoubleArrowRight /></button>
                 </div>
             </div>
             {TRANSACTION_LIST.map(item => <TransactionItem key={item.id} {...item} />)}
