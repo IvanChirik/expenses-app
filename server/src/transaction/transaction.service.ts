@@ -21,13 +21,16 @@ export class TransactionService {
           id
         }
       },
+      relations: {
+        category: true
+      },
       order: {
         createdAt: "DESC"
       },
       take: limit,
       skip: (page - 1) * limit
     });
-    if (!transactions.length)
+    if (transactions.length == 0)
       throw new BadRequestException('Транзакции не найдены');
     return transactions;
   }
@@ -57,6 +60,7 @@ export class TransactionService {
           id
         }
       },
+      relations: { category: true },
       order: {
         createdAt: 'DESC'
       }
@@ -76,7 +80,6 @@ export class TransactionService {
       },
       relations: {
         category: true,
-        user: true
       }
     });
     if (!transaction)
