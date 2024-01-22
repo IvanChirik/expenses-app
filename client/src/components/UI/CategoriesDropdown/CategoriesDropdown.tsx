@@ -6,7 +6,7 @@ import { IDropdownProps } from './CategoriesDropdown.props';
 import { MdKeyboardArrowDown } from "react-icons/md";
 import cn from 'classnames';
 
-const Dropdown: FC<IDropdownProps> = ({ className, onSelectId, options, ...props }) => {
+const CategoriesDropdown: FC<IDropdownProps> = ({ className, onSelectId, options, ...props }) => {
     const [selectedItem, setSelectedItem] = useState<ReactNode>(null);
     const [isDropdownOpen, setDropdownOpen] = useState<boolean>(false);
 
@@ -42,4 +42,4 @@ const Dropdown: FC<IDropdownProps> = ({ className, onSelectId, options, ...props
 };
 
 
-export default Dropdown;
+export default CategoriesDropdown;

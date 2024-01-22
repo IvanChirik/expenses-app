@@ -1,15 +1,17 @@
 
+export const enum TransactionType {
+    Income = 'income',
+    Expense = 'expense'
+}
+
 export interface ITransactionData {
     id: number;
     title: string;
     amount: number;
-    type: 'income' | 'expense';
+    type: TransactionType
     category: {
         id: number;
-    };
-    user: {
-        id: number;
+        title: string;
     };
     createdAt: Date;
-    updatedAt: Date;
 }

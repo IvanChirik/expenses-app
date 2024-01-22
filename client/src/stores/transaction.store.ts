@@ -6,11 +6,15 @@ import { create } from "zustand";
 
 export interface TransactionState {
     transactions: ITransactionData[];
-    saveCategoryData: (transactions: ITransactionData[]) => void
+    pageQuantity: number;
+    saveTransactionData: (transactions: ITransactionData[]) => void;
+    setPaginationPageQuantity: (quantity: number) => void;
 }
 
 
 export const useTransactionState = create<TransactionState>((set) => ({
     transactions: [],
-    saveCategoryData: (transactions) => set(() => ({ transactions: transactions }))
+    pageQuantity: 0,
+    saveTransactionData: (transactions) => set(() => ({ transactions: transactions })),
+    setPaginationPageQuantity: (quantity) => set(() => ({ pageQuantity: Math.ceil(quantity) }))
 }))

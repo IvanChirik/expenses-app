@@ -37,7 +37,8 @@
     align-self: center;
 }
 
-.transaction-block {
+.transaction-block,
+.categories {
     display: flex;
     flex-direction: column;
     gap: 10px;

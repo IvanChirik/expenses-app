@@ -1,12 +1,11 @@
 'use client';
 
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import Card from '../../UI/Card/Card';
 import styles from './TransactionsCard.module.css';
 import { ITransactionsCard } from './TransactionsCard.props';
 import cn from 'classnames';
 import TransactionItem from '@/components/TransactionItem/TransactionItem';
-import { ITransactionItem } from '@/components/TransactionItem/TransactionItem.props';
 import Input from '@/components/UI/Input/Input';
 import { MdKeyboardDoubleArrowRight } from "react-icons/md";
 import { MdKeyboardDoubleArrowLeft } from "react-icons/md";
@@ -14,72 +13,49 @@ import { BsThreeDots } from "react-icons/bs";
 import { FiSearch } from "react-icons/fi";
 import { useQuery } from '@tanstack/react-query';
 import transactionService from '@/services/transactionService';
+import { ITransactionData } from '@/interfaces/transaction.interface';
+import { useTransactionState } from '@/stores/transaction.store';
 
 
-const TRANSACTION_LIST: ITransactionItem[] = [
-    {
-        id: Math.random().toString(),
-        title: 'ref',
-        type: 'income',
-        amount: 1000,
-        category: 'Salary',
-        createdAt: new Date(),
-    },
-    {
-        id: Math.random().toString(),
-        title: 'reghfgf',
-        type: 'expense',
-        amount: 100,
-        category: 'Groceries',
-        createdAt: new Date(),
-    },
-    {
-        id: Math.random().toString(),
-        title: 'gfjhfgref',
-        type: 'income',
-        amount: 3000,
-        category: 'Salary',
-        createdAt: new Date(),
-    },
-    {
-        id: Math.random().toString(),
-        title: 'ref',
-        type: 'income',
-        amount: 3200,
-        category: 'Salary',
-        createdAt: new Date(),
-    },
-    {
-        id: Math.random().toString(),
-        title: 'gfdg bdfgdg ffdgdfg  dtyhh dt tdhdt thth  thhrt h rth ',
-        type: 'expense',
-        amount: 1,
-        category: 'Groceries',
-        createdAt: new Date(),
-    },
-]
 
 const TransactionsCard: FC<ITransactionsCard> = ({ className, ...props }) => {
     const [transactionPage, setTransactionPage] = useState<number>(1);
-    const { data, error, isError } = useQuery({ queryKey: ['transactions'], queryFn: () => transactionService.findWithPagination(transactionPage) })
-    console.log(data);
-
+    const { data, error, isError } = useQuery({
+        queryKey: ['transactions', transactionPage],
+        queryFn: () => transactionService.findWithPagination(transactionPage)
+    });
+    const { pageQuantity } = useTransactionState();
+    useEffect(() => {
+        if (pageQuantity < transactionPage && pageQuantity !== 0) {
+            setTransactionPage(prev => prev - 1);
+        }
+    }, [pageQuantity])
     return (
         <Card onWheel={() => console.log('wheel')} className={cn(className, styles['transaction-wrapper'])} {...props}>
-            <div className={styles['card-header']}>
+            {pageQuantity > 0 && <><div className={styles['card-header']}>
                 <div className={styles['input-wrapper']}>
                     <Input className={styles.input} placeholder='Найти по описанию или категории...' />
                     <FiSearch className={styles['search-icon']} />
                 </div>
                 <div className={styles.pagination}>
+                    <button
+                        disabled={transactionPage === 1}
+                        className={styles.arrow}
+                        onClick={() => setTransactionPage(prev => prev - 1)}>
+                        <MdKeyboardDoubleArrowLeft />
+                    </button>
+                    {transactionPage}
+                    <BsThreeDots className={styles.dots} />
+                    {pageQuantity}
                     <button className={styles.arrow}
-                        onClick={() => setTransactionPage(prev => prev - 1)}><MdKeyboardDoubleArrowLeft /></button>
-                    1  <BsThreeDots className={styles.dots} /> 20
-                    <button className={styles.arrow}
-                        onClick={() => setTransactionPage(prev => prev + 1)}><MdKeyboardDoubleArrowRight /></button>
+                        disabled={transactionPage === pageQuantity}
+                        onClick={() => setTransactionPage(prev => prev + 1)}>
+                        <MdKeyboardDoubleArrowRight />
+                    </button>
                 </div>
             </div>
-            {TRANSACTION_LIST.map(item => <TransactionItem key={item.id} {...item} />)}
+                {data && data.map((t: ITransactionData) => <TransactionItem transactionPage={transactionPage} transaction={t} key={t.id} />)}</>}
+            {pageQuantity <= 0 && <div>Пока что нет записей о расходах  и доходах</div>}
         </Card >
     );
 };

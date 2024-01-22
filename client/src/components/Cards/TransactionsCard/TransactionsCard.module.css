@@ -51,3 +51,7 @@
 .arrow:hover {
     border-bottom: 1px solid rgb(139, 118, 246);
 }
+
+.arrow:disabled {
+    border: none;
+}

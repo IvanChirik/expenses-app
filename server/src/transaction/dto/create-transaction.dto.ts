@@ -9,7 +9,7 @@ export class CreateTransactionDto {
     @IsNumber()
     amount: number
     @IsNotEmpty()
-    @MaxLength(6)
+    @MaxLength(7)
     type: 'income' | 'expense'
     @IsNotEmpty()
     category: Categories

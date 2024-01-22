@@ -1,15 +1,15 @@
 import { $api } from "@/http";
-import { ITransactionData } from "@/interfaces/transaction.interface";
+import { ITransactionData, TransactionType } from "@/interfaces/transaction.interface";
 import { AxiosError } from "axios";
 
 class TransactionService {
 
     private readonly TRANSACTION_ENDPOINT = '/transactions';
 
-    async createTransaction(trancaction: { title: string, amount: number, type: 'income' | 'expense', category: { id: number } }) {
+    async createTransaction(transaction: { title: string, amount: number, type: TransactionType, category: { id: number } }) {
         try {
-            const { data: transaction } = await $api.post<ITransactionData>(this.TRANSACTION_ENDPOINT, { ...trancaction });
-            return transaction;
+            const { data: transactionData } = await $api.post<ITransactionData>(this.TRANSACTION_ENDPOINT, { ...transaction });
+            return transactionData;
         } catch (error) {
             if (error instanceof AxiosError)
                 throw new Error(error.response?.data.message)
@@ -44,7 +44,7 @@ class TransactionService {
                 throw new Error(error.response?.data.message)
         }
     }
-    async updateCategory(transactionId: number, title?: string, amount?: number) {
+    async updateTransaction(transactionId: number, title?: string, amount?: number) {
         try {
             return await $api.patch(`${this.TRANSACTION_ENDPOINT}/:${transactionId}`, { title, amount });
         } catch (error) {
@@ -52,9 +52,9 @@ class TransactionService {
                 throw new Error(error.response?.data.message)
         }
     }
-    async deleteCategory(transactionId: number) {
+    async deleteTransaction(transactionId: number) {
         try {
-            return await $api.delete(`${this.TRANSACTION_ENDPOINT}/:${transactionId}`);
+            return await $api.delete(`${this.TRANSACTION_ENDPOINT}/${transactionId}`);
         } catch (error) {
             if (error instanceof AxiosError)
                 throw new Error(error.response?.data.message)

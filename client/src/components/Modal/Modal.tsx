@@ -7,16 +7,17 @@ import Label from '../UI/Label/Label';
 import Input from '../UI/Input/Input';
 import Card from '../UI/Card/Card';
 import { AiOutlineClose } from "react-icons/ai";
-import Dropdown from '../UI/CategoriesDropdown/CategoriesDropdown';
+import CategoriesDropdown from '../UI/CategoriesDropdown/CategoriesDropdown';
 import Button from '../UI/Button/Button';
 import cn from 'classnames';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import categoryService from '@/services/categoryService';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { validateTransactionAmount, validateTransactionTitle } from '@/helpers/validate';
 import transactionService from '@/services/transactionService';
 import Toastify from '../UI/Toastify/Toastify';
 import { toast } from 'react-toastify';
+import { TransactionType } from '@/interfaces/transaction.interface';
 
 interface ITransactionForm {
     title: string;
@@ -24,20 +25,22 @@ interface ITransactionForm {
 }
 
 const Modal: FC<IModal> = ({ isOpen, onClose }) => {
-    const { register, handleSubmit, formState: { errors } } = useForm<ITransactionForm>()
+    const { register, handleSubmit, formState: { errors }, reset } = useForm<ITransactionForm>()
     const { data: categories, error, isError } = useQuery({
         queryKey: ['categories'],
         queryFn: () => categoryService.findAll(),
         // select: (categories) => categories?.map((category: ICategoryData) => category.title)
     });
-
+    const queryClient = useQueryClient();
     const [categoryId, setCategoryId] = useState<number>(NaN);
-    const [activeTransactionButton, setActiveTransactionButton] = useState<'income' | 'expense'>('expense');
+    const [activeTransactionButton, setActiveTransactionButton] = useState<TransactionType>(TransactionType.Expense);
     const { mutate } = useMutation({
-        mutationFn: ({ title, amount, id, type }: { title: string, amount: number, id: number, type: 'income' | 'expense' }) => transactionService.createTransaction({ category: { id }, type, title, amount }),
+        mutationFn: ({ title, amount, id, type }: { title: string, amount: number, id: number, type: TransactionType }) => transactionService.createTransaction({ category: { id }, type, title, amount }),
         onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['transactions'] });
+            reset();
             onClose();
-            (() => toast.success('Транзакция успешно создана'));
+            (() => toast.success('Транзакция успешно создана'))();
         },
         onError: (variable) => {
             (() => toast.error(variable.toString()))()
@@ -46,7 +49,7 @@ const Modal: FC<IModal> = ({ isOpen, onClose }) => {
 
 
     const submit: SubmitHandler<ITransactionForm> = (data) => {
-        mutate({ title: data.title, amount: data.amount, id: categoryId, type: activeTransactionButton });
+        mutate({ title: data.title, amount: +data.amount, id: categoryId, type: activeTransactionButton });
     }
 
     return <>
@@ -59,23 +62,23 @@ const Modal: FC<IModal> = ({ isOpen, onClose }) => {
                             <div className={styles['button-block']}>
                                 <button
                                     type='button'
-                                    onClick={() => setActiveTransactionButton('income')}
+                                    onClick={() => setActiveTransactionButton(TransactionType.Income)}
                                     className={cn(styles['transaction-type-button'],
                                         styles['income-type'], {
-                                        [styles['income-active']]: activeTransactionButton === 'income'
+                                        [styles['income-active']]: activeTransactionButton === TransactionType.Income
                                     })}>Доход</button>
                                 <button
                                     type='button'
-                                    onClick={() => setActiveTransactionButton('expense')}
+                                    onClick={() => setActiveTransactionButton(TransactionType.Expense)}
                                     className={cn(styles['transaction-type-button'],
                                         styles['expense-type'], {
-                                        [styles['expense-active']]: activeTransactionButton === 'expense'
+                                        [styles['expense-active']]: activeTransactionButton === TransactionType.Expense
                                     })}>Расход</button>
                             </div>
                         </div>
-                        <div>
+                        <div className={styles.categories}>
                             <Label>Категория</Label>
-                            {categories && <Dropdown onSelectId={(id) => setCategoryId(id)} options={categories} />}
+                            {categories && <CategoriesDropdown onSelectId={(id) => setCategoryId(id)} options={categories} />}
                         </div>
                     </div>
                     <div>

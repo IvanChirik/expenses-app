@@ -13,5 +13,5 @@ export const validateTransactionTitle = (title: string) => {
     return title.length > 3;
 }
 export const validateTransactionAmount = (amount: number) => {
-    return amount < 0;
+    return +amount > 0;
 }

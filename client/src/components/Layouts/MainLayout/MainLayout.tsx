@@ -20,7 +20,7 @@ const queryClient = new QueryClient({
 });
 
 const MainLayout: FC<PropsWithChildren<MenuLayoutProps>> = ({ children }) => {
-    const token: boolean = !!localStorage.getItem('token');
+    const token = localStorage.getItem('token');
     const { deleteUserData } = useUserState();
     const pathname = usePathname();
     const { replace } = useRouter();
