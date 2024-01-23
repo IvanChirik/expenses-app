@@ -65,7 +65,7 @@ export class TransactionService {
         createdAt: 'DESC'
       }
     })
-    if (!transactions.length)
+    if (transactions.length === 0)
       throw new BadRequestException('Что-то пошло не так....')
     return transactions;
   }
