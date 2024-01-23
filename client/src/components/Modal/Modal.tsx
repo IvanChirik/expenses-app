@@ -1,6 +1,6 @@
 'use client';
 
-import React, { FC, useState } from 'react';
+import { FC } from 'react';
 import styles from './Modal.module.css';
 import { IModal } from './Modal.props';
 import Label from '../UI/Label/Label';
@@ -10,75 +10,58 @@ import { AiOutlineClose } from "react-icons/ai";
 import CategoriesDropdown from '../UI/CategoriesDropdown/CategoriesDropdown';
 import Button from '../UI/Button/Button';
 import cn from 'classnames';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import categoryService from '@/services/categoryService';
-import { SubmitHandler, useForm } from 'react-hook-form';
 import { validateTransactionAmount, validateTransactionTitle } from '@/helpers/validate';
-import transactionService from '@/services/transactionService';
 import Toastify from '../UI/Toastify/Toastify';
-import { toast } from 'react-toastify';
 import { TransactionType } from '@/interfaces/transaction.interface';
+import { useTransactionModal } from '@/hooks/useTransactionModal';
 
-interface ITransactionForm {
-    title: string;
-    amount: number;
-}
+
 
 const Modal: FC<IModal> = ({ isOpen, onClose }) => {
-    const { register, handleSubmit, formState: { errors }, reset } = useForm<ITransactionForm>()
-    const { data: categories, error, isError } = useQuery({
-        queryKey: ['categories'],
-        queryFn: () => categoryService.findAll(),
-        // select: (categories) => categories?.map((category: ICategoryData) => category.title)
-    });
-    const queryClient = useQueryClient();
-    const [categoryId, setCategoryId] = useState<number>(NaN);
-    const [activeTransactionButton, setActiveTransactionButton] = useState<TransactionType>(TransactionType.Expense);
-    const { mutate } = useMutation({
-        mutationFn: ({ title, amount, id, type }: { title: string, amount: number, id: number, type: TransactionType }) => transactionService.createTransaction({ category: { id }, type, title, amount }),
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['transactions'] });
-            reset();
-            onClose();
-            (() => toast.success('Транзакция успешно создана'))();
+    const { formContol: { sumbitHandler,
+        errors,
+        register },
+        typeButton: {
+            transactionType,
+            setTransactionType
         },
-        onError: (variable) => {
-            (() => toast.error(variable.toString()))()
-        }
-    });
-
-
-    const submit: SubmitHandler<ITransactionForm> = (data) => {
-        mutate({ title: data.title, amount: +data.amount, id: categoryId, type: activeTransactionButton });
-    }
+        categoryState: {
+            categories,
+            setCategoryId
+        },
+        currentEditTransaction,
+    } = useTransactionModal(onClose);
 
     return <>
         {isOpen && <div className={styles['modal-overlay']}>
             <Card className={styles['modal-content']}>
-                <form className={styles.form} onSubmit={handleSubmit(submit)}>
+                <form className={styles.form} onSubmit={sumbitHandler}>
                     <div className={styles['dropdown-section']}>
                         <div className={styles['transaction-block']}>
                             <Label>Тип транзакции</Label>
                             <div className={styles['button-block']}>
                                 <button
                                     type='button'
-                                    onClick={() => setActiveTransactionButton(TransactionType.Income)}
+                                    onClick={() => setTransactionType(TransactionType.Income)}
                                     className={cn(styles['transaction-type-button'],
                                         styles['income-type'], {
-                                        [styles['income-active']]: activeTransactionButton === TransactionType.Income
+                                        [styles['income-active']]: transactionType === TransactionType.Income
                                     })}>Доход</button>
                                 <button
                                     type='button'
-                                    onClick={() => setActiveTransactionButton(TransactionType.Expense)}
+                                    onClick={() => setTransactionType(TransactionType.Expense)}
                                     className={cn(styles['transaction-type-button'],
                                         styles['expense-type'], {
-                                        [styles['expense-active']]: activeTransactionButton === TransactionType.Expense
+                                        [styles['expense-active']]: transactionType === TransactionType.Expense
                                     })}>Расход</button>
                             </div>
                         </div>
                         <div className={styles.categories}>
                             <Label>Категория</Label>
-                            {categories && <CategoriesDropdown onSelectId={(id) => setCategoryId(id)} options={categories} />}
+                            {categories && <CategoriesDropdown
+                                onSelectId={(id) => setCategoryId(id)}
+                                defaultCategory={currentEditTransaction?.category.title}
+                                options={categories} />}
                         </div>
                     </div>
                     <div>
@@ -103,7 +86,7 @@ const Modal: FC<IModal> = ({ isOpen, onClose }) => {
                             Сумма не может быть меньше нуля
                         </div>
                     </div>
-                    <Button className={styles['form-button']}>Добавить</Button>
+                    <Button className={styles['form-button']}>{currentEditTransaction ? 'Обновить' : 'Добавить'}</Button>
                 </form>
                 <button className={styles['close-button']} onClick={() => onClose()}><AiOutlineClose /></button>
             </Card>

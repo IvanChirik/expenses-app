@@ -35,7 +35,7 @@ const ProfileCard: FC<IProfileCard> = ({ className, ...props }) => {
                     <div className={styles['expense']}><span>Расход за период:</span> 1000</div>
                 </div>
             </Card >
-            <Modal isOpen={!isModalHidden} onClose={closeModalWindow} />
+            {!isModalHidden && <Modal isOpen={!isModalHidden} onClose={closeModalWindow} />}
         </>
     );
 };

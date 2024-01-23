@@ -22,17 +22,18 @@ const TransactionsCard: FC<ITransactionsCard> = ({ className, ...props }) => {
     const [transactionPage, setTransactionPage] = useState<number>(1);
     const { data, error, isError } = useQuery({
         queryKey: ['transactions', transactionPage],
-        queryFn: () => transactionService.findWithPagination(transactionPage)
+        queryFn: () => transactionService.findWithPagination(transactionPage),
+        retry: false
     });
     const { pageQuantity } = useTransactionState();
     useEffect(() => {
         if (pageQuantity < transactionPage && pageQuantity !== 0) {
             setTransactionPage(prev => prev - 1);
         }
-    }, [pageQuantity])
+    }, [pageQuantity, isError, error])
     return (
         <Card onWheel={() => console.log('wheel')} className={cn(className, styles['transaction-wrapper'])} {...props}>
-            {pageQuantity > 0 && <><div className={styles['card-header']}>
+            {!isError && <><div className={styles['card-header']}>
                 <div className={styles['input-wrapper']}>
                     <Input className={styles.input} placeholder='Найти по описанию или категории...' />
                     <FiSearch className={styles['search-icon']} />
@@ -55,7 +56,7 @@ const TransactionsCard: FC<ITransactionsCard> = ({ className, ...props }) => {
                 </div>
             </div>
                 {data && data.map((t: ITransactionData) => <TransactionItem transactionPage={transactionPage} transaction={t} key={t.id} />)}</>}
-            {pageQuantity <= 0 && <div>Пока что нет записей о расходах  и доходах</div>}
+            {isError && <div>Пока что нет записей о расходах  и доходах</div>}
         </Card >
     );
 };

@@ -37,16 +37,16 @@ class TransactionService {
     }
     async findById(transactionId: number) {
         try {
-            const { data: transaction } = await $api.get<ITransactionData>(`${this.TRANSACTION_ENDPOINT}/:${transactionId}`);
+            const { data: transaction } = await $api.get<ITransactionData>(`${this.TRANSACTION_ENDPOINT}/${transactionId}`);
             return transaction;
         } catch (error) {
             if (error instanceof AxiosError)
                 throw new Error(error.response?.data.message)
         }
     }
-    async updateTransaction(transactionId: number, title?: string, amount?: number) {
+    async updateTransaction(transactionId: number, transaction: { title: string, amount: number, type: TransactionType, category: { id: number } }) {
         try {
-            return await $api.patch(`${this.TRANSACTION_ENDPOINT}/:${transactionId}`, { title, amount });
+            return await $api.patch<ITransactionData>(`${this.TRANSACTION_ENDPOINT}/${transactionId}`, { ...transaction });
         } catch (error) {
             if (error instanceof AxiosError)
                 throw new Error(error.response?.data.message)

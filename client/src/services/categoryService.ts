@@ -26,7 +26,7 @@ class CategoryService {
     }
     async findById(categoryId: number) {
         try {
-            const { data: category } = await $api.get<ICategoryData>(`${this.CATEGORY_ENDPOINT}/:${categoryId}`);
+            const { data: category } = await $api.get<ICategoryData>(`${this.CATEGORY_ENDPOINT}/${categoryId}`);
             return category;
         } catch (error) {
             if (error instanceof AxiosError)
@@ -35,7 +35,7 @@ class CategoryService {
     }
     async updateCategory(categoryId: number, title: string) {
         try {
-            return await $api.patch(`${this.CATEGORY_ENDPOINT}/:${categoryId}`, { title });
+            return await $api.patch(`${this.CATEGORY_ENDPOINT}/${categoryId}`, { title });
         } catch (error) {
             if (error instanceof AxiosError)
                 throw new Error(error.response?.data.message)
@@ -43,7 +43,7 @@ class CategoryService {
     }
     async deleteCategory(categoryId: number) {
         try {
-            return await $api.delete(`${this.CATEGORY_ENDPOINT}/:${categoryId}`);
+            return await $api.delete(`${this.CATEGORY_ENDPOINT}/${categoryId}`);
         } catch (error) {
             if (error instanceof AxiosError)
                 throw new Error(error.response?.data.message)

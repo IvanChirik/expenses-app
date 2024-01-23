@@ -1,16 +1,16 @@
 'use client';
 
-import { FC, ReactNode, useState } from 'react';
+import { FC, useState } from 'react';
 import styles from './CategoriesDropdown.module.css';
 import { IDropdownProps } from './CategoriesDropdown.props';
 import { MdKeyboardArrowDown } from "react-icons/md";
 import cn from 'classnames';
 
-const CategoriesDropdown: FC<IDropdownProps> = ({ className, onSelectId, options, ...props }) => {
-    const [selectedItem, setSelectedItem] = useState<ReactNode>(null);
+const CategoriesDropdown: FC<IDropdownProps> = ({ className, onSelectId, defaultCategory, options, ...props }) => {
+    const [selectedItem, setSelectedItem] = useState<string | null>(null);
     const [isDropdownOpen, setDropdownOpen] = useState<boolean>(false);
 
-    const handleItemClick = (item: ReactNode, id: number) => {
+    const handleItemClick = (item: string, id: number) => {
         onSelectId(id)
         setSelectedItem(item);
         setDropdownOpen(false);
@@ -24,7 +24,7 @@ const CategoriesDropdown: FC<IDropdownProps> = ({ className, onSelectId, options
             <div
                 className={styles['dropdown-title']}
                 onClick={toggleDropdown}>
-                {selectedItem || "Выберите элемент"}&nbsp;<MdKeyboardArrowDown className={cn(styles.arrow, {
+                {selectedItem || defaultCategory || "Выберите элемент"}&nbsp;<MdKeyboardArrowDown className={cn(styles.arrow, {
                     [styles.active]: isDropdownOpen
                 })} />
             </div>
