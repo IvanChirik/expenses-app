@@ -7,10 +7,10 @@
     padding: 10px 20px;
     color: white;
     background-color: rgb(139, 118, 246);
+    cursor: pointer;
 }
 
 .button:hover {
-    cursor: pointer;
     background-color: rgb(154, 137, 243);
 }
 

@@ -37,6 +37,13 @@
     align-self: center;
 }
 
+.form-button:disabled,
+.form-button:hover:disabled {
+    background-color: var(--primary-hover-color);
+    cursor: not-allowed;
+}
+
+
 .transaction-block,
 .categories {
     display: flex;

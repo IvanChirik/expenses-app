@@ -22,8 +22,9 @@ export interface ITransactionSendData {
 }
 
 export const useTransactionModal = (onClose: () => void) => {
-    const { register, handleSubmit, formState: { errors }, reset, setValue } = useForm<ITransactionForm>();
+    const { getFieldState, register, handleSubmit, formState: { errors }, reset, setValue } = useForm<ITransactionForm>();
     const [categoryId, setCategoryId] = useState<number>(NaN);
+    const [disabledButton, setDisabledButton] = useState<boolean>(true);
     const [activeTransactionButton, setActiveTransactionButton] = useState<TransactionType>(TransactionType.Expense);
     const { currentEditTransaction } = useTransactionState();
 
@@ -52,7 +53,15 @@ export const useTransactionModal = (onClose: () => void) => {
 
 
     const submit: SubmitHandler<ITransactionForm> = (data) => {
-        mutate({ id: currentEditTransaction?.id, title: data.title, amount: +data.amount, type: activeTransactionButton, category: { id: categoryId } })
+        mutate({
+            id: currentEditTransaction?.id,
+            title: data.title,
+            amount: +data.amount,
+            type: activeTransactionButton,
+            category: {
+                id: categoryId
+            }
+        })
     };
     const sumbitHandler = (handleSubmit(submit));
 
@@ -65,7 +74,10 @@ export const useTransactionModal = (onClose: () => void) => {
             setValue('amount', currentEditTransaction.amount);
         }
     }, []);
-
+    useEffect(() => {
+        if (!isNaN(categoryId))
+            setDisabledButton(false)
+    }, [getFieldState, categoryId]);
 
     return {
         formContol: {
@@ -78,11 +90,11 @@ export const useTransactionModal = (onClose: () => void) => {
             categories,
             setCategoryId
         },
-        currentEditTransaction,
         typeButton: {
             transactionType: activeTransactionButton,
             setTransactionType: setActiveTransactionButton
-        }
-
+        },
+        currentEditTransaction,
+        disabledButton
     }
 }

@@ -18,9 +18,11 @@ import { useTransactionModal } from '@/hooks/useTransactionModal';
 
 
 const Modal: FC<IModal> = ({ isOpen, onClose }) => {
-    const { formContol: { sumbitHandler,
-        errors,
-        register },
+    const {
+        formContol: {
+            errors,
+            sumbitHandler,
+            register },
         typeButton: {
             transactionType,
             setTransactionType
@@ -29,6 +31,7 @@ const Modal: FC<IModal> = ({ isOpen, onClose }) => {
             categories,
             setCategoryId
         },
+        disabledButton,
         currentEditTransaction,
     } = useTransactionModal(onClose);
 
@@ -86,9 +89,9 @@ const Modal: FC<IModal> = ({ isOpen, onClose }) => {
                             Сумма не может быть меньше нуля
                         </div>
                     </div>
-                    <Button className={styles['form-button']}>{currentEditTransaction ? 'Обновить' : 'Добавить'}</Button>
+                    <Button className={styles['form-button']} disabled={disabledButton}>{currentEditTransaction ? 'Обновить' : 'Добавить'}</Button>
                 </form>
-                <button className={styles['close-button']} onClick={() => onClose()}><AiOutlineClose /></button>
+                <button className={styles['close-button']} onClick={() => onClose()}  ><AiOutlineClose /></button>
             </Card>
             <Toastify />
         </div >}

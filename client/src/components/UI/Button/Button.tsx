@@ -4,7 +4,7 @@ import styles from './Button.module.css';
 import cn from 'classnames';
 
 const Button: FC<PropsWithChildren<ButtonProps>> = ({ children, className, fontSz = 'sm', ...props }) => {
-    return <button className={cn(styles.button, className, {
+    return <button className={cn(className, styles.button, {
         [styles.upper]: fontSz == 'lg'
     })} {...props}>{children}</button>
 };
