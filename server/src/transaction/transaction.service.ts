@@ -14,8 +14,8 @@ export class TransactionService {
   ) { }
 
 
-  async findAllWithPagination(id: number, page: number, limit: number) {
-    const transactions = await this.transactionRepository.find({
+  async findAllWithPagination(id: number, page: number, limit: number, filter: string) {
+    let transactions = await this.transactionRepository.find({
       where: {
         user: {
           id
@@ -30,6 +30,9 @@ export class TransactionService {
       take: limit,
       skip: (page - 1) * limit
     });
+    if (filter && transactions.length !== 0) {
+      transactions = transactions.filter((transaction) => transaction.title.includes(filter) || transaction.category.title.includes(filter));
+    }
     if (transactions.length == 0)
       throw new BadRequestException('Транзакции не найдены');
     return transactions;
@@ -53,8 +56,8 @@ export class TransactionService {
     return await this.transactionRepository.save(newTransaction);
   }
 
-  async findAll(id: number) {
-    const transactions = await this.transactionRepository.find({
+  async findAll(id: number, findParam: string) {
+    let transactions = await this.transactionRepository.find({
       where: {
         user: {
           id
@@ -64,9 +67,12 @@ export class TransactionService {
       order: {
         createdAt: 'DESC'
       }
-    })
+    });
+    if (findParam && transactions.length !== 0) {
+      transactions = transactions.filter((transaction) => transaction.title.includes(findParam) || transaction.category.title.includes(findParam))
+    }
     if (transactions.length === 0)
-      throw new BadRequestException('Что-то пошло не так....')
+      throw new BadRequestException('Что-то пошло не так....');
     return transactions;
   }
 
