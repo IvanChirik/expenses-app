@@ -1,6 +1,6 @@
 'use client';
 
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import Card from "../../UI/Card/Card";
 import styles from './ProfileCard.module.css';
 import cn from 'classnames';
@@ -10,6 +10,9 @@ import { VscAdd } from "react-icons/vsc";
 import Button from "@/components/UI/Button/Button";
 import Modal from "@/components/Modal/Modal";
 import { useUserState } from "@/stores/user.store";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useTransactionState } from "@/stores/transaction.store";
+import transactionService from "@/services/transactionService";
 
 const ProfileCard: FC<IProfileCard> = ({ className, ...props }) => {
     const [isModalHidden, setIsModalHidden] = useState<boolean>(true);
@@ -21,6 +24,21 @@ const ProfileCard: FC<IProfileCard> = ({ className, ...props }) => {
     const closeModalWindow = () => {
         setIsModalHidden(true);
     }
+    const {
+        saveTransactionData,
+        setPaginationPageQuantity,
+    } = useTransactionState();
+    const { data, isSuccess, isError } = useQuery({
+        queryKey: ['transactions'],
+        queryFn: () => transactionService.findAll(),
+    });
+
+    useEffect(() => {
+        if (isSuccess && data) {
+            saveTransactionData(data);
+            setPaginationPageQuantity(data.length / 5);
+        }
+    }, [isSuccess, data, isError]);
     return (
         <>
             <Card className={cn(className, styles['profile-card'])} {...props}>

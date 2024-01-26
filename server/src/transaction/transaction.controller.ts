@@ -11,8 +11,8 @@ export class TransactionController {
 
   @Get('pagination')
   @UseGuards(JwtAuthGuard)
-  findAllWithPagination(@Request() req, @Query('page') page: number, @Query('limit') limit: number) {
-    return this.transactionService.findAllWithPagination(+req.user.id, page, limit)
+  findAllWithPagination(@Request() req, @Query('page') page: number, @Query('limit') limit: number, @Query('filter') filter: string) {
+    return this.transactionService.findAllWithPagination(+req.user.id, page, limit, filter)
   }
 
   @Post()
@@ -24,8 +24,8 @@ export class TransactionController {
 
   @Get()
   @UseGuards(JwtAuthGuard)
-  findAll(@Request() req) {
-    return this.transactionService.findAll(+req.user.id);
+  findAll(@Request() req, @Query('find_title') find_title: string) {
+    return this.transactionService.findAll(+req.user.id, find_title);
   }
 
   @Get(':id')

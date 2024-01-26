@@ -15,19 +15,22 @@ class TransactionService {
                 throw new Error(error.response?.data.message)
         }
     }
-    async findAll() {
+    async findAll(filter?: string) {
         try {
-            const { data: transactions } = await $api.get<ITransactionData[]>(this.TRANSACTION_ENDPOINT);
+            const { data: transactions } = await $api.get<ITransactionData[]>(this.TRANSACTION_ENDPOINT, {
+                params: { filter }
+            });
             return transactions;
         } catch (error) {
             if (error instanceof AxiosError)
                 throw new Error(error.response?.data.message)
         }
     }
-    async findWithPagination(page: number) {
+    async findWithPagination(page: number, filter?: string) {
         try {
+            console.log(filter);
             const { data: transactions } = await $api.get<ITransactionData[]>(`${this.TRANSACTION_ENDPOINT}/pagination`, {
-                params: { page, limit: 5 }
+                params: { page, limit: 5, filter }
             });
             return transactions;
         } catch (error) {
