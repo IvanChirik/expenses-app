@@ -11,7 +11,7 @@ import { MdKeyboardDoubleArrowRight } from "react-icons/md";
 import { MdKeyboardDoubleArrowLeft } from "react-icons/md";
 import { BsThreeDots } from "react-icons/bs";
 import { FiSearch } from "react-icons/fi";
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import transactionService from '@/services/transactionService';
 import { ITransactionData } from '@/interfaces/transaction.interface';
 import { useTransactionState } from '@/stores/transaction.store';
@@ -21,14 +21,20 @@ const TransactionsCard: FC<ITransactionsCard> = ({ className, ...props }) => {
     const [transactionPage, setTransactionPage] = useState<number>(1);
     const [wheelCard, setWheelCard] = useState<number>(0);
     const [filterParams, setFilterParams] = useState<string>('');
-    const { data, error, isError } = useQuery({
-        queryKey: ['transactions', transactionPage],
-        queryFn: () => transactionService.findWithPagination(transactionPage, filterParams),
+    const { saveTransactionData } = useTransactionState();
+    const { data, isSuccess } = useQuery({
+        queryKey: ['transactions', filterParams],
+        queryFn: () => transactionService.findAll(filterParams),
         retry: false
     });
-    const { pageQuantity } = useTransactionState();
-    const queryClient = useQueryClient();
+    useEffect(() => {
+        if (isSuccess && data) {
+            saveTransactionData(data);
+        }
+    }, [isSuccess, data]);
     const wheelDirection = (e: WheelEvent<HTMLDivElement>) => {
+        if (data && e.deltaY > 0 && transactionPage == Math.ceil(data?.length / 5))
+            return
         if (e.deltaY > 0) {
             setWheelCard(transactionPage + 1);
             return;
@@ -42,12 +48,6 @@ const TransactionsCard: FC<ITransactionsCard> = ({ className, ...props }) => {
         setFilterParams(e.target.value);
     };
     useEffect(() => {
-        const timer = setTimeout(() => {
-            queryClient.invalidateQueries({ queryKey: ['transactions', 1] });
-        }, 1000)
-        return () => clearTimeout(timer);
-    }, [filterParams])
-    useEffect(() => {
         const wheelTimer = setTimeout(() => {
             if (wheelCard > transactionPage) {
                 setTransactionPage(prev => prev + 1);
@@ -60,14 +60,9 @@ const TransactionsCard: FC<ITransactionsCard> = ({ className, ...props }) => {
             clearTimeout(wheelTimer)
         }
     }, [wheelCard]);
-    useEffect(() => {
-        if (pageQuantity < transactionPage && pageQuantity !== 0) {
-            setTransactionPage(prev => prev - 1);
-        }
-    }, [pageQuantity, isError, error])
     return (
         <Card onWheel={wheelDirection} className={cn(className, styles['transaction-wrapper'])} {...props}>
-            {!isError && <><div className={styles['card-header']}>
+            <div className={styles['card-header']}>
                 <div className={styles['input-wrapper']}>
                     <Input
                         className={styles.input}
@@ -77,7 +72,7 @@ const TransactionsCard: FC<ITransactionsCard> = ({ className, ...props }) => {
                     />
                     <FiSearch className={styles['search-icon']} />
                 </div>
-                <div className={styles.pagination}>
+                {data && <div className={styles.pagination}>
                     <button
                         disabled={transactionPage === 1}
                         className={styles.arrow}
@@ -86,16 +81,20 @@ const TransactionsCard: FC<ITransactionsCard> = ({ className, ...props }) => {
                     </button>
                     {transactionPage}
                     <BsThreeDots className={styles.dots} />
-                    {pageQuantity}
+                    {Math.ceil(data?.length / 5)}
                     <button className={styles.arrow}
-                        disabled={transactionPage === pageQuantity}
+                        disabled={transactionPage === Math.ceil(data?.length / 5)}
                         onClick={() => setTransactionPage(prev => prev + 1)}>
                         <MdKeyboardDoubleArrowRight />
                     </button>
-                </div>
+                </div>}
             </div>
-                {data && data.map((t: ITransactionData) => <TransactionItem transactionPage={transactionPage} transaction={t} key={t.id} />)}</>}
-            {isError && <div>Пока что нет записей о расходах  и доходах</div>}
+            {data && data.slice(transactionPage * 5 - 5, transactionPage * 5).map((t: ITransactionData) =>
+                <TransactionItem
+                    transactionPage={transactionPage}
+                    transaction={t}
+                    key={t.id} />)}
+            {!data && <div>Пока что нет записей о расходах  и доходах</div>}
         </Card >
     );
 };

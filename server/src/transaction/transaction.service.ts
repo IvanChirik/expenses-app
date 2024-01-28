@@ -3,7 +3,7 @@ import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { UpdateTransactionDto } from './dto/update-transaction.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Transactions } from './entities/transaction.entity';
-import { Repository } from 'typeorm';
+import { LessThanOrEqual, MoreThan, Repository } from 'typeorm';
 
 @Injectable()
 export class TransactionService {
@@ -56,12 +56,27 @@ export class TransactionService {
     return await this.transactionRepository.save(newTransaction);
   }
 
-  async findAll(id: number, findParam: string) {
+  async findAll(id: number, findParam: string, period: string) {
+    const curentDate = new Date();
+    const lastDate = new Date();
+    if (period == 'year') {
+      lastDate.setFullYear(curentDate.getFullYear() - 1);
+      console.log(curentDate.getFullYear(), lastDate.getFullYear());
+    }
+    else if (period == 'month') {
+      lastDate.setMonth(curentDate.getMonth() - 1);
+      console.log(curentDate.getMonth(), lastDate.getMonth());
+    }
+    else {
+      lastDate.setDate(curentDate.getDate() - 1);
+      console.log(curentDate.getDate(), lastDate.getDate());
+    }
     let transactions = await this.transactionRepository.find({
       where: {
         user: {
           id
-        }
+        },
+        createdAt: MoreThan(lastDate) && LessThanOrEqual(curentDate)
       },
       relations: { category: true },
       order: {

@@ -28,7 +28,6 @@ class TransactionService {
     }
     async findWithPagination(page: number, filter?: string) {
         try {
-            console.log(filter);
             const { data: transactions } = await $api.get<ITransactionData[]>(`${this.TRANSACTION_ENDPOINT}/pagination`, {
                 params: { page, limit: 5, filter }
             });

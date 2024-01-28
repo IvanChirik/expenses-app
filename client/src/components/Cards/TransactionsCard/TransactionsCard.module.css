@@ -55,3 +55,7 @@
 .arrow:disabled {
     border: none;
 }
+
+.card-header {
+    justify-self: flex-start;
+}
