@@ -10,9 +10,11 @@ import { TransactionType } from '@/interfaces/transaction.interface';
 export interface ITransactionForm {
     title: string;
     amount: number;
+    date: Date;
 }
 export interface ITransactionSendData {
     id?: number;
+    createdAt: Date;
     title: string,
     amount: number,
     category: {
@@ -56,6 +58,7 @@ export const useTransactionModal = (onClose: () => void) => {
         mutate({
             id: currentEditTransaction?.id,
             title: data.title,
+            createdAt: new Date(data.date),
             amount: +data.amount,
             type: activeTransactionButton,
             category: {

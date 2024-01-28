@@ -89,6 +89,18 @@ const Modal: FC<IModal> = ({ isOpen, onClose }) => {
                             Сумма не может быть меньше нуля
                         </div>
                     </div>
+                    <div>
+                        <Label htmlFor='date'>Дата</Label>
+                        <Input id='date'
+                            placeholder='Выберите дату'
+                            type='date'
+                            className={styles['date']}
+                            {...register('date', { required: true })} />
+                        <div className={styles.error}
+                            hidden={errors.amount ? false : true}>
+                            Сумма не может быть меньше нуля
+                        </div>
+                    </div>
                     <Button className={styles['form-button']} disabled={disabledButton}>{currentEditTransaction ? 'Обновить' : 'Добавить'}</Button>
                 </form>
                 <button className={styles['close-button']} onClick={() => onClose()}  ><AiOutlineClose /></button>

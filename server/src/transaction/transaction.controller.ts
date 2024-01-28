@@ -24,8 +24,8 @@ export class TransactionController {
 
   @Get()
   @UseGuards(JwtAuthGuard)
-  findAll(@Request() req, @Query('find_title') find_title: string) {
-    return this.transactionService.findAll(+req.user.id, find_title);
+  findAll(@Request() req, @Query('filter') filter: string, @Query('period') period: string) {
+    return this.transactionService.findAll(+req.user.id, filter, period);
   }
 
   @Get(':id')
