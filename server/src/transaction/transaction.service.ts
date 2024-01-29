@@ -3,7 +3,7 @@ import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { UpdateTransactionDto } from './dto/update-transaction.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Transactions } from './entities/transaction.entity';
-import { LessThanOrEqual, MoreThan, Repository } from 'typeorm';
+import { MoreThanOrEqual, Repository } from 'typeorm';
 
 @Injectable()
 export class TransactionService {
@@ -49,10 +49,11 @@ export class TransactionService {
       },
       user: {
         id
-      }
+      },
+      createdAt: new Date(createTransactionDto.createdAt)
     }
     if (!newTransaction)
-      throw new BadRequestException('Что-то пошло не так....')
+      throw new BadRequestException('Что-то пошло не так....');
     return await this.transactionRepository.save(newTransaction);
   }
 
@@ -68,15 +69,15 @@ export class TransactionService {
       console.log(curentDate.getMonth(), lastDate.getMonth());
     }
     else {
-      lastDate.setDate(curentDate.getDate() - 1);
-      console.log(curentDate.getDate(), lastDate.getDate());
+      lastDate.setFullYear(curentDate.getFullYear() - 40);
+      console.log(curentDate.getDate(), lastDate);
     }
     let transactions = await this.transactionRepository.find({
       where: {
         user: {
           id
         },
-        createdAt: MoreThan(lastDate) && LessThanOrEqual(curentDate)
+        createdAt: MoreThanOrEqual(lastDate)
       },
       relations: { category: true },
       order: {
@@ -137,3 +138,4 @@ export class TransactionService {
     return await this.transactionRepository.delete(id);
   }
 }
+

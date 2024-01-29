@@ -17,12 +17,13 @@ export class CategoryService {
   async create(createCategoryDto: CreateCategoryDto, id: number) {
     const isEmpty = await this.categoriesRepository.findBy({
       user: { id },
-      title: createCategoryDto.title
+      title: createCategoryDto.title,
     });
     if (isEmpty.length)
       throw new BadRequestException('Такая категория уже существует')
     const category = {
       title: createCategoryDto.title,
+      color: createCategoryDto.color,
       user: {
         id
       }

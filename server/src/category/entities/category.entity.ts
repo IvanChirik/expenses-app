@@ -8,6 +8,8 @@ export class Categories {
     id: number
     @Column()
     title: string
+    @Column()
+    color: string
     @CreateDateColumn()
     createdAt: Date
     @UpdateDateColumn()
