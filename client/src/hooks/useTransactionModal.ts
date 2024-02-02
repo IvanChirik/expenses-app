@@ -43,9 +43,8 @@ export const useTransactionModal = (onClose: () => void) => {
             return await transactionService.createTransaction({ ...transaction });
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['transactions'] });
-            reset();
             onClose();
+            queryClient.invalidateQueries({ queryKey: ['transactions'] });
             (() => toast.success('Транзакция успешно создана'))();
         },
         onError: (variable) => {

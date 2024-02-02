@@ -1,3 +1,4 @@
+import { COLOR } from "@/helpers/colorSchema";
 import { $api } from "@/http";
 import { ICategoryData } from "@/interfaces/category.interface";
 import { AxiosError } from "axios";
@@ -6,9 +7,9 @@ class CategoryService {
 
     private readonly CATEGORY_ENDPOINT = '/categories';
 
-    async createCategory(title: string) {
+    async createCategory(title: string, color: COLOR) {
         try {
-            const { data: category } = await $api.post<ICategoryData>(this.CATEGORY_ENDPOINT, { title });
+            const { data: category } = await $api.post<ICategoryData>(this.CATEGORY_ENDPOINT, { title, color });
             return category;
         } catch (error) {
             if (error instanceof AxiosError)
@@ -33,9 +34,12 @@ class CategoryService {
                 throw new Error(error.response?.data.message)
         }
     }
-    async updateCategory(categoryId: number, title: string) {
+    async updateCategory(categoryId: number, title?: string, color?: COLOR) {
         try {
-            return await $api.patch(`${this.CATEGORY_ENDPOINT}/${categoryId}`, { title });
+            return await $api.patch(`${this.CATEGORY_ENDPOINT}/${categoryId}`, {
+                title,
+                color
+            });
         } catch (error) {
             if (error instanceof AxiosError)
                 throw new Error(error.response?.data.message)

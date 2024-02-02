@@ -46,7 +46,8 @@ export class CategoryService {
     const category = await this.categoriesRepository.findOne({
       where: { id },
       relations: {
-        transactions: true
+        transactions: true,
+        user: true
       }
     });
     if (!category)

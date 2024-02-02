@@ -10,7 +10,7 @@ import { AiOutlineClose } from "react-icons/ai";
 import CategoriesDropdown from '../UI/CategoriesDropdown/CategoriesDropdown';
 import Button from '../UI/Button/Button';
 import cn from 'classnames';
-import { validateTransactionAmount, validateTransactionTitle } from '@/helpers/validate';
+import { validateTransactionAmount, validateTransactionDate, validateTransactionTitle } from '@/helpers/validate';
 import Toastify from '../UI/Toastify/Toastify';
 import { TransactionType } from '@/interfaces/transaction.interface';
 import { useTransactionModal } from '@/hooks/useTransactionModal';
@@ -70,7 +70,7 @@ const Modal: FC<IModal> = ({ isOpen, onClose }) => {
                     <div>
                         <Label htmlFor='title'>Описание</Label>
                         <Input id='title'
-                            placeholder='Описание расхода'
+                            placeholder={`Описание ${transactionType === TransactionType.Expense ? 'расхода' : 'дохода'}`}
                             {...register('title', { required: true, validate: value => validateTransactionTitle(value) })} />
                         <div className={styles.error}
                             hidden={errors.title ? false : true}>
@@ -80,7 +80,7 @@ const Modal: FC<IModal> = ({ isOpen, onClose }) => {
                     <div>
                         <Label htmlFor='amount'>Сумма</Label>
                         <Input id='amount'
-                            placeholder='Введите потрченную полусенную сумму'
+                            placeholder={`Введите ${transactionType === TransactionType.Expense ? 'потраченную' : 'полученную'} сумму`}
                             type='number'
                             className={styles['number-input']}
                             {...register('amount', { required: true, validate: value => validateTransactionAmount(value) })} />
@@ -95,10 +95,10 @@ const Modal: FC<IModal> = ({ isOpen, onClose }) => {
                             placeholder='Выберите дату'
                             type='date'
                             className={styles['date']}
-                            {...register('date', { required: true })} />
+                            {...register('date', { required: true, validate: value => validateTransactionDate(value) })} />
                         <div className={styles.error}
-                            hidden={errors.amount ? false : true}>
-                            Сумма не может быть меньше нуля
+                            hidden={errors.date ? false : true}>
+                            Поделитесь со мной технологией путешествий во времени?
                         </div>
                     </div>
                     <Button className={styles['form-button']} disabled={disabledButton}>{currentEditTransaction ? 'Обновить' : 'Добавить'}</Button>

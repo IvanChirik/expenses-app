@@ -11,6 +11,7 @@ import Button from "@/components/UI/Button/Button";
 import Modal from "@/components/Modal/Modal";
 import { useUserState } from "@/stores/user.store";
 
+
 const ProfileCard: FC<IProfileCard> = ({ className, ...props }) => {
     const [isModalHidden, setIsModalHidden] = useState<boolean>(true);
     const { userProfile } = useUserState.getState();
