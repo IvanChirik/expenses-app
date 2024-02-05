@@ -12,13 +12,13 @@ import { useTransactionState } from '@/stores/transaction.store';
 
 
 const MainPageWrapper: FC = () => {
-    const { transactions } = useTransactionState();
-    useEffect(() => {
-        setTimeout(() => {
-            console.log('Edit');
-            (() => toast.error('Изменение'))()
-        }, 0)
-    }, [transactions]);
+    // const { transactions } = useTransactionState();
+    // useEffect(() => {
+    //     setTimeout(() => {
+    //         console.log('Edit');
+    //         (() => toast.error('Изменение'))()
+    //     }, 0)
+    // }, [transactions]);
     return <>
         <ProfileCard className={styles.profile} />
         <div className={styles['content-block']} >

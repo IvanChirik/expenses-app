@@ -1,10 +1,11 @@
 .profile {
     justify-self: center;
     flex: 1;
+    height: 85vh;
 }
 
 .content-block {
-    height: 70vh;
+    height: 85vh;
     justify-self: center;
     flex: 2;
     display: flex;
@@ -18,5 +19,5 @@
 }
 
 .transaction {
-    flex: 2;
+    flex: 1;
 }

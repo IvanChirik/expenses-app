@@ -1,14 +1,25 @@
+.wrapper {
+    display: flex;
+    flex-direction: row-reverse;
+    height: 100vh;
+    min-width: 100vw;
+    align-items: center;
+}
+
 .navigate {
+    flex: 1;
     font-size: 18px;
     display: flex;
+    flex-direction: column;
     justify-content: space-around;
-    padding: 10px;
     transition: height 3s;
+    height: 70vh;
 }
 
 .link {
+    font-size: 24px;
     text-align: center;
-    padding: 15px 5px;
+    padding: 5px 15px;
     max-width: 200px;
     width: 100%;
     transition: all 0.2s;
@@ -16,8 +27,8 @@
 
 .link:hover,
 .active {
-    font-size: 20px;
-    border-bottom: 1px solid rgb(139, 118, 246);
+    font-size: 26px;
+    border-left: 1px solid rgb(139, 118, 246);
 }
 
 .link:hover>.exit {
@@ -25,11 +36,10 @@
 }
 
 .main {
+    flex: 6;
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 84vh;
-    margin-bottom: 30px;
 }
 
 .exit {

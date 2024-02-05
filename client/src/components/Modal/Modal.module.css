@@ -3,19 +3,38 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
+    height: 100vh;
     background-color: rgba(0, 0, 0, 0.7);
     display: flex;
-    align-items: center;
     justify-content: center;
-    z-index: 2;
+    align-items: center;
+    z-index: 20;
 }
 
 .modal-content {
+    position: fixed;
     background-color: #000;
     width: 50vw;
-    height: 60vh;
-    position: relative;
+    height: 75vh;
+    z-index: 30;
+    overflow-x: hidden;
+}
+
+
+.modal-content::-webkit-scrollbar {
+    width: 10px;
+    border-radius: 10px;
+    background-color: black;
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: var(--primary-color);
+}
+
+.modal-content::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
 }
 
 .dropdown-section {
