@@ -46,3 +46,18 @@
 .expense {
     color: rgba(244, 77, 77);
 }
+
+.select {
+    outline: none;
+    border: none;
+    background-color: black;
+    font-size: 16px;
+    font-weight: 400;
+    border: 2px solid var(--primary-color);
+    padding: 10px;
+    border-radius: 10px;
+    text-align: center;
+    width: 100px;
+    height: 50px;
+    align-self: center;
+}

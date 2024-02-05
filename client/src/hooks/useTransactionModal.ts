@@ -10,7 +10,7 @@ import { TransactionType } from '@/interfaces/transaction.interface';
 export interface ITransactionForm {
     title: string;
     amount: number;
-    date: Date;
+    date: string;
 }
 export interface ITransactionSendData {
     id?: number;
@@ -24,7 +24,7 @@ export interface ITransactionSendData {
 }
 
 export const useTransactionModal = (onClose: () => void) => {
-    const { getFieldState, register, handleSubmit, formState: { errors }, reset, setValue } = useForm<ITransactionForm>();
+    const { getFieldState, register, handleSubmit, formState: { errors }, setValue } = useForm<ITransactionForm>();
     const [categoryId, setCategoryId] = useState<number>(NaN);
     const [disabledButton, setDisabledButton] = useState<boolean>(true);
     const [activeTransactionButton, setActiveTransactionButton] = useState<TransactionType>(TransactionType.Expense);
@@ -74,6 +74,7 @@ export const useTransactionModal = (onClose: () => void) => {
             setActiveTransactionButton(currentEditTransaction.type);
             setValue('title', currentEditTransaction.title);
             setValue('amount', currentEditTransaction.amount);
+            setValue('date', new Date(currentEditTransaction.createdAt).toISOString().slice(0, 10));
         }
     }, []);
     useEffect(() => {

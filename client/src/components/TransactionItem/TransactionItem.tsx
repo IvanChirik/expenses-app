@@ -11,6 +11,7 @@ import { toast } from 'react-toastify';
 import Modal from '../Modal/Modal';
 import { useTransactionState } from '@/stores/transaction.store';
 import { formatDate } from '@/helpers/dataFormater';
+import { amountFormater } from '@/helpers/amountFormater';
 
 
 const TransactionItem: FC<ITransactionItem> = ({ className, transactionPage, transaction, ...props }) => {
@@ -47,7 +48,7 @@ const TransactionItem: FC<ITransactionItem> = ({ className, transactionPage, tra
                     <div className={styles['hidden-title']}>{title}</div>
                     <div className={styles.tooltip}>{title}</div>
                 </div>
-                <div className={styles.amount}>{amount}</div>
+                <div className={styles.amount}>{amountFormater(amount)}</div>
                 <div className={styles.type}>{category.title}</div>
                 <div className={styles.date}>{formatDate(createdAt)}</div>
                 <div className={styles.actions}>

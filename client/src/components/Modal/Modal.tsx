@@ -63,7 +63,7 @@ const Modal: FC<IModal> = ({ isOpen, onClose }) => {
                             <Label>Категория</Label>
                             {categories && <CategoriesDropdown
                                 onSelectId={(id) => setCategoryId(id)}
-                                defaultCategory={currentEditTransaction?.category.title}
+                                defaultCategory={currentEditTransaction?.category}
                                 options={categories} />}
                         </div>
                     </div>

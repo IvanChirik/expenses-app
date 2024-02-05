@@ -10,6 +10,7 @@ import { VscAdd } from "react-icons/vsc";
 import Button from "@/components/UI/Button/Button";
 import Modal from "@/components/Modal/Modal";
 import { useUserState } from "@/stores/user.store";
+import { amountFormater } from "@/helpers/amountFormater";
 
 
 const ProfileCard: FC<IProfileCard> = ({ className, ...props }) => {
@@ -31,14 +32,14 @@ const ProfileCard: FC<IProfileCard> = ({ className, ...props }) => {
                     <div className={styles['profile-email']}>{userProfile?.email}</div>
                 </div>
                 <Button onClick={openModalWindow} className={styles['add-button']}><VscAdd style={{ fontSize: '25px' }} />Добавить запись</Button>
-                <select >
+                <select className={styles.select}>
                     <option value='year'>За год</option>
                     <option value='month'>За месяц</option>
                     <option value='week'>За неделю</option>
                 </select>
                 <div className={styles['info-wrapper']}>
-                    <div className={styles['income']}><span>Доход за период:</span> 1000</div>
-                    <div className={styles['expense']}><span>Расход за период:</span> 1000</div>
+                    <div className={styles['income']}><span>Доход за период:</span> {amountFormater(2000)}</div>
+                    <div className={styles['expense']}><span>Расход за период:</span> {amountFormater(1000)}</div>
                 </div>
             </Card >
             {!isModalHidden && <Modal isOpen={!isModalHidden} onClose={closeModalWindow} />}

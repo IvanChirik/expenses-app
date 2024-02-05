@@ -12,6 +12,7 @@ export interface ITransactionData {
     category: {
         id: number;
         title: string;
+        color: string;
     };
     createdAt: Date;
 }

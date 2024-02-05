@@ -15,7 +15,7 @@ export const validateTransactionTitle = (title: string) => {
 export const validateTransactionAmount = (amount: number) => {
     return +amount > 0;
 }
-export const validateTransactionDate = (date: Date) => {
+export const validateTransactionDate = (date: string) => {
     const currentDate = new Date(date);
     return currentDate < new Date();
 }

@@ -72,12 +72,12 @@ const CategoriesDropdown: FC<IDropdownProps> = ({ className, onSelectId, default
     }
     return (
         <div className={styles.dropdown}
-            style={{ backgroundColor: `${selectedItem?.color}` }}
+            style={{ backgroundColor: `${selectedItem?.color || defaultCategory?.color}` }}
             {...props}>
             <div
                 className={styles['dropdown-title']}
                 onClick={toggleDropdown}>
-                {selectedItem?.title || defaultCategory || "Выберите категорию"}&nbsp;<MdKeyboardArrowDown className={cn(styles.arrow, {
+                {selectedItem?.title || defaultCategory?.title || "Выберите категорию"}&nbsp;<MdKeyboardArrowDown className={cn(styles.arrow, {
                     [styles.active]: isDropdownOpen
                 })} />
             </div>
