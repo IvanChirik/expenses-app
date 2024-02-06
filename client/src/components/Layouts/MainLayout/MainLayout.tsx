@@ -60,6 +60,7 @@ const MainLayout: FC<PropsWithChildren<MenuLayoutProps>> = ({ children }) => {
                             })}>
                             <TfiStatsDown />
                         </Link>
+                        <hr className={styles.seporator} />
                         <Link
                             onClick={logout}
                             href={'/auth/login'}

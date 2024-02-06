@@ -1,10 +1,11 @@
 .transaction-wrapper {
     flex-direction: column;
-    justify-content: space-around;
+    gap: 10px;
 }
 
 .card-header {
     display: flex;
+    justify-self: flex-start;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 10px;
@@ -58,4 +59,14 @@
 
 .card-header {
     justify-self: flex-start;
+}
+
+.empty-list {
+    display: flex;
+    align-items: center;
+    min-height: 20vh;
+    font-size: 28px;
+    font-weight: 500;
+    justify-self: flex-end;
+    align-self: center;
 }

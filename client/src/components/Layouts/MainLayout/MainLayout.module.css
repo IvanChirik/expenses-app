@@ -13,6 +13,7 @@
     flex-direction: column;
     justify-content: space-around;
     transition: height 3s;
+    max-width: 10vw;
     height: 70vh;
 }
 
@@ -21,22 +22,17 @@
     text-align: center;
     padding: 5px 15px;
     max-width: 200px;
-    width: 100%;
     transition: all 0.2s;
 }
 
 .link:hover,
 .active {
-    font-size: 26px;
     border-left: 1px solid rgb(139, 118, 246);
 }
 
-.link:hover>.exit {
-    font-size: 24px;
-}
 
 .main {
-    flex: 6;
+    flex: 7;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -48,6 +44,9 @@
     margin-right: 10px;
 }
 
+.seporator {
+    border: 1px solid var(--primary-color);
+}
 
 /* 
 .additional-content {

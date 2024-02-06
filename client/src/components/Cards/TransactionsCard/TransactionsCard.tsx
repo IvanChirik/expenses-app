@@ -21,17 +21,13 @@ const TransactionsCard: FC<ITransactionsCard> = ({ className, ...props }) => {
     const [transactionPage, setTransactionPage] = useState<number>(1);
     const [wheelCard, setWheelCard] = useState<number>(0);
     const [filterParams, setFilterParams] = useState<string>('');
-    const { saveTransactionData } = useTransactionState();
+    const { saveTransactionData, transactionPeriod } = useTransactionState();
     const { data, isSuccess } = useQuery({
-        queryKey: ['transactions', filterParams],
-        queryFn: () => transactionService.findAll(filterParams),
+        queryKey: ['transactions', filterParams, transactionPeriod],
+        queryFn: () => transactionService.findAll(transactionPeriod, filterParams),
         retry: false
     });
-    useEffect(() => {
-        if (isSuccess && data) {
-            saveTransactionData(data);
-        }
-    }, [isSuccess, data]);
+    const lastPage = data && Math.ceil(data?.length / 5);
     const wheelDirection = (e: WheelEvent<HTMLDivElement>) => {
         if (data && e.deltaY > 0 && transactionPage == Math.ceil(data?.length / 5))
             return
@@ -47,6 +43,15 @@ const TransactionsCard: FC<ITransactionsCard> = ({ className, ...props }) => {
     const changeFilterParams = (e: ChangeEvent<HTMLInputElement>) => {
         setFilterParams(e.target.value);
     };
+    useEffect(() => {
+        if (lastPage && lastPage < transactionPage)
+            setTransactionPage(1);
+    }, [lastPage])
+    useEffect(() => {
+        if (isSuccess && data && !filterParams) {
+            saveTransactionData(data);
+        }
+    }, [isSuccess, data]);
     useEffect(() => {
         const wheelTimer = setTimeout(() => {
             if (wheelCard > transactionPage) {
@@ -72,7 +77,7 @@ const TransactionsCard: FC<ITransactionsCard> = ({ className, ...props }) => {
                     />
                     <FiSearch className={styles['search-icon']} />
                 </div>
-                {data && <div className={styles.pagination}>
+                {data && data?.length > 5 && <div className={styles.pagination}>
                     <button
                         disabled={transactionPage === 1}
                         className={styles.arrow}
@@ -94,7 +99,7 @@ const TransactionsCard: FC<ITransactionsCard> = ({ className, ...props }) => {
                     transactionPage={transactionPage}
                     transaction={t}
                     key={t.id} />)}
-            {!data && <div>Пока что нет записей о расходах  и доходах</div>}
+            {!data && <div className={styles['empty-list']}>{`Нет найдено записей ${filterParams ? `по фильтру - ${filterParams}.` : 'о расходах и доходах.'}`}</div>}
         </Card >
     );
 };

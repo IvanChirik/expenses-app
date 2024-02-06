@@ -1,5 +1,6 @@
 import { $api } from "@/http";
 import { ITransactionData, TransactionType } from "@/interfaces/transaction.interface";
+import { TransactionPeriodOptions } from "@/stores/transaction.store";
 import { AxiosError } from "axios";
 
 class TransactionService {
@@ -15,10 +16,13 @@ class TransactionService {
                 throw new Error(error.response?.data.message)
         }
     }
-    async findAll(filter?: string) {
+    async findAll(period: TransactionPeriodOptions, filter?: string,) {
         try {
             const { data: transactions } = await $api.get<ITransactionData[]>(this.TRANSACTION_ENDPOINT, {
-                params: { filter }
+                params: {
+                    filter,
+                    period
+                }
             });
             return transactions;
         } catch (error) {
@@ -29,7 +33,11 @@ class TransactionService {
     async findWithPagination(page: number, filter?: string) {
         try {
             const { data: transactions } = await $api.get<ITransactionData[]>(`${this.TRANSACTION_ENDPOINT}/pagination`, {
-                params: { page, limit: 5, filter }
+                params: {
+                    page,
+                    limit: 5,
+                    filter
+                }
             });
             return transactions;
         } catch (error) {
